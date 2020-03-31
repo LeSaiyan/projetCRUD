@@ -1,0 +1,46 @@
+extends layout
+
+block content
+    <br> <br>
+    h1='Client n°' + client.id_client
+
+    - var date = new Date(client.date_naissance)
+    - var id_ville = (ville !== null) ? ville.id_ville : null;
+    - var nom_ville = (ville !== null) ? ville.nom + ' (' + ville.code_postal + ')' : null;
+    - var val = date.getFullYear() + '-' + (((date.getMonth() + 1) < 10) ? '0' : '') + (date.getMonth() + 1) + '-' + (((date.getDate() + 1) < 10) ? '0' : '') + date.getDate()
+
+    form(method='POST', action='/users/' + client.id_client)
+        label(for='nom') Nom :
+        input#nom(type='text', name='nom', value=client.nom)
+        <br> <br>
+        label(for='prenom') Prenom :
+        input#prenom(type='text', name='prenom', value=client.prenom)
+        <br> <br>
+        label(for='civilite') Civilite :
+        select#civilite(name='civilite')
+            option(value='M', selected=client.civilite === 'M') M
+            option(value='F', selected=client.civilite === 'F') F
+        <br> <br>
+        label(for='adresse') Adresse :
+        input#adresse(type='text', name='adresse', value=client.adresse)
+        <br> <br>
+        label(for='date_naissance') Date de naissance :
+        input#date_naissance(type='date', name='date_naissance', value=val)
+        <br> <br>
+        label(for='numero') Numéro :
+        input#numero(type='text', name='numero', value=client.numero)
+        <br> <br>
+        .ui-widget
+            label(for='ville') Ville :
+            input#ville(type='hidden', name='ville', value=id_ville)
+            input#labelVille(type='text', name='labelVille' value=nom_ville)
+        <br> <br>
+        input(type='submit', value='enregistrer')
+
+    ul
+    each commande in commandes
+        li.commande(onclick='afficherInfosCommande(#{commande.id_commande})') Commande n°#{commande.id_commande}
+
+    #detailsCommandes
+
+    script(src='/javascripts/clientDetail.js')
